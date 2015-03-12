@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberMapper">
+	
+	<update id="shipin" parameterType="pd">
+		update  tb_hdmsg
+		set
+			video = #{video}
+		where 
+			h_id = #{h_id}
+	</update>
+	
+	<!-- 验证登录 -->
+	<select id="denglu" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+			sys_app_user
+		where 
+			USERNAME = #{USERNAME}
+		and 
+			PASSWORD = #{PASSWORD}
+	</select>
+	<!-- ================================================================================================== -->
+	
+	<!-- 删除图片 -->
+	<update id="delTp1" parameterType="pd">
+		update  tb_member
+			set
+				tp1 	 = ''
+			where 
+				m_id = #{m_id}
+	</update>
+	<update id="delTp2" parameterType="pd">
+		update  tb_member
+			set
+				tp2 	 = ''
+			where 
+				m_id = #{m_id}
+	</update>
+	<update id="delTp3" parameterType="pd">
+		update  tb_member
+			set
+				tp3 	 = ''
+			where 
+				m_id = #{m_id}
+	</update>
+	
+	
+	<update id="editzt" parameterType="pd">
+		update  tb_hdmsg
+			set
+				zt 	 = #{zt}
+			where 
+				h_id = #{h_id}
+	</update>
+	
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  tb_member
+			set member_id		= #{member_id},
+				brithday		= #{brithday},
+				name 			= #{name},
+				sex				= #{sex},
+				address 		= #{address},
+				phone 			= #{phone},
+				zt	 			= #{zt},
+				tp1 			= #{tp1},
+				tp2				= #{tp2},
+				tp3 			= #{tp3}
+			where 
+				m_id = #{m_id}
+	</update>
+	
+	<!-- 通过id获取数据 -->
+	<select id="findByid" parameterType="pd" resultType="pd">
+		select 
+			m_id,
+			member_id,
+			brithday,
+			name,
+			sex,
+			address,
+			phone,
+			zt,
+			tp1,
+			tp2,
+			tp3
+		from 
+			tb_member
+		where 
+			m_id = #{m_id}
+	</select>
+	<!-- 通过member_id获取数据 -->
+	<select id="findBymid" parameterType="pd" resultType="pd">
+		select 
+			m_id,
+			member_id,
+			brithday,
+			name,
+			sex,
+			address,
+			phone,
+			zt,
+			tp1,
+			tp2,
+			tp3
+		from 
+			tb_member
+		where 
+			member_id = #{member_id}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into tb_member (
+			m_id,
+			member_id,
+			brithday,
+			name,
+			sex,
+			address,
+			phone,
+			zt,
+			tp1,
+			tp2,
+			tp3
+		) values (
+			#{m_id},
+			#{member_id},
+			#{brithday},
+			#{name},
+			#{sex},
+			#{address},
+			#{phone},
+			#{zt},
+			#{tp1},
+			#{tp2},
+			#{tp3}
+		)
+	</insert>
+	<!-- 列表 -->
+	<select id="memberlistPage" parameterType="page" resultType="pd">
+		select
+			m_id,
+			member_id,
+			brithday,
+			name,
+			sex,
+			phone,
+			zt
+		from tb_member 
+		where 
+			1 = 1
+		<if test="pd.name != null and pd.name != ''"><!-- 姓名检索 -->
+			and name LIKE "%"#{pd.name}"%" 
+		</if>
+		<if test="pd.member_id != null and pd.member_id != ''"><!-- 身份证号检索 -->
+			and member_id LIKE "%"#{pd.member_id}"%" 
+		</if>
+		<if test="pd.phone != null and pd.phone != ''"><!-- 联系方式检索 -->
+			and phone LIKE "%"#{pd.phone}"%" 
+		</if>
+		<if test="pd.sex != null and pd.sex != ''"><!-- 性别检索 -->
+			and sex=#{pd.sex} 
+		</if>
+		<if test="pd.zt != null and pd.zt != ''"><!-- 状态检索 -->
+			and zt=#{pd.zt} 
+		</if>
+	</select>
+	<!-- 新增核对信息 -->
+	<insert id="savehd" parameterType="pd">
+		insert into tb_hdmsg (
+			h_id,
+			member_id,
+			video,
+			zt,
+			tp1,
+			tp2,
+			tp3,
+			ctime
+		) values (
+			#{h_id},
+			#{member_id},
+			#{video},
+			#{zt},
+			#{tp1},
+			#{tp2},
+			#{tp3},
+			#{ctime}
+		)
+	</insert>
+	<select id="findByidhd" parameterType="pd" resultType="pd">
+		select 
+			h_id,
+			member_id,
+			video,
+			zt,
+			tp1,
+			tp2,
+			tp3
+		from 
+			tb_hdmsg
+		where 
+			h_id = #{h_id}
+	</select>
+	<!-- 核对信息列表 -->
+	<select id="hdlistPage" parameterType="page" resultType="pd">
+		select
+			h_id,
+			member_id,
+			zt,
+			ctime,
+			video
+		from tb_hdmsg 
+		where 
+			1 = 1
+		<if test="pd.member_id != null and pd.member_id != ''"><!-- 身份证号检索 -->
+			and member_id LIKE "%"#{pd.member_id}"%" 
+		</if>
+		<if test="pd.zt != null and pd.zt != ''"><!-- 状态检索 -->
+			and zt=#{pd.zt} 
+		</if>
+		ORDER by ctime desc
+	</select>
+	
+	
+	<!-- 核对信息列表 -->
+	<select id="hdlistall" parameterType="pd" resultType="pd">
+		select
+			*
+		from tb_hdmsg 
+		where 
+			member_id = #{member_id}
+		ORDER by ctime desc
+		limit 0,5
+	</select>
+	
+	<!-- 删除核对信息 -->
+	<delete id="deletehd" parameterType="pd">
+		delete from tb_hdmsg 
+		where 
+			h_id = #{h_id}
+	</delete>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from tb_member 
+		where 
+			m_id = #{m_id}
+	</delete>
+	
+	<!-- ================================================================================================== -->
+	
+</mapper>

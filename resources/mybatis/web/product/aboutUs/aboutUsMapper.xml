@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="aboutUsMapper">
+	
+	<select id="aboutUs" resultType="pd">
+		select id,version_number,version_status,link_android,
+		website,qq,wechat,copyright,company_introduction,address,
+		phone,edit_time,create_time,link_ios,e_mail  
+		from tb_app_about_us
+	</select>
+<!-- 	
+	<insert id="add" parameterType="pd">
+		insert into tb_app_about_us (
+			id,
+			version_number, 
+			version_status, 
+			link, 
+			website, 
+			qq, 
+			wechat, 
+			copyright, 
+			create_time
+		) 
+		values (
+			#{id},
+			#{version_number},
+			#{version_status},
+			#{link},
+			#{website},
+			#{qq},
+			#{wechat},
+			#{copyright},
+			now()
+		)
+	</insert>
+	 -->
+	<select id="listaboutUsById" parameterType="pd" resultType="pd">
+		select * from tb_app_about_us
+		where id=#{id}
+	</select>
+	
+	<delete id="delete" parameterType="pd">
+		delete from tb_app_about_us 
+		where id=#{id} 
+	</delete>
+	
+	<update id="update" parameterType="pd">
+		update tb_app_about_us 
+		<set>
+			version_number =#{version_number},
+			version_status =#{version_status},
+			link_android   =#{link_android},
+			link_ios       =#{link_ios},
+			website        =#{website},
+			qq             =#{qq},
+			wechat         =#{wechat},
+		    copyright	   =#{copyright},
+		    e_mail          =#{e_mail},
+		    address        =#{address},
+		    phone          =#{phone},
+			edit_time      = now()
+		</set>
+		where id=#{id}
+	</update>
+</mapper>
